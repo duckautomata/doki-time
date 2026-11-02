@@ -1,0 +1,26 @@
+name = "doki-time-app"
+compatibility_date = "2026-11-01"
+main = "./src/worker.js"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[[routes]]
+pattern = "www.duck-automata.com/doki-time"
+zone_name = "duck-automata.com"
+
+[[routes]]
+pattern = "www.duck-automata.com/doki-time/*"
+zone_name = "duck-automata.com"
+
+[env.dev]
+name = "doki-time-dev"
+
+[[env.dev.routes]]
+pattern = "dev.duck-automata.com/doki-time"
+zone_name = "duck-automata.com"
+
+[[env.dev.routes]]
+pattern = "dev.duck-automata.com/doki-time/*"
+zone_name = "duck-automata.com"

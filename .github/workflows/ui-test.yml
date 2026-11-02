@@ -1,0 +1,52 @@
+name: UI Test
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+    pull_request:
+        branches: ["master"]
+
+jobs:
+    test:
+        runs-on: ubuntu-latest
+        timeout-minutes: 10
+        permissions:
+            contents: read
+            checks: write
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+            - name: Setup Node.js
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version: "22"
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Verify Package Signatures
+              run: npm audit signatures --min-release-age=0
+
+            - name: Format Check
+              run: npm run format:check
+
+            - name: Lint Check
+              run: npm run lint
+
+            - name: Run Tests
+              run: npm run test:ci
+
+            - name: Report Test Results
+              uses: dorny/test-reporter@d1b5dff021aa968b288b02285a8bf47471c5928a # v3.2.0
+              if: always()
+              with:
+                  name: Vitest Results
+                  path: junit.xml
+                  reporter: jest-junit
+
+            - name: Build Static Files
+              run: npm run build
