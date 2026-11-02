@@ -11,12 +11,12 @@ const typography = {
     h6: { fontWeight: 700 },
 };
 
-/** Dokimotes blue, per mode. `soft` is the faint accent tint behind highlighted rows. */
 const accents = {
     dark: {
         main: "#3b82f6",
         light: "#60a5fa",
         dark: "#1d4ed8",
+        hover: "#60a5fa",
         contrastText: "#fff",
         soft: "rgba(59, 130, 246, 0.15)",
     },
@@ -24,6 +24,7 @@ const accents = {
         main: "#2563eb",
         light: "#60a5fa",
         dark: "#1e40af",
+        hover: "#1d4ed8",
         contrastText: "#fff",
         soft: "rgba(37, 99, 235, 0.12)",
     },

@@ -6,7 +6,6 @@ import Snackbar from "@mui/material/Snackbar";
 import Stack from "@mui/material/Stack";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { ThemeProvider } from "@mui/material/styles";
 import { darkTheme, lightTheme } from "./theme";
@@ -14,7 +13,7 @@ import ClockCheck from "./components/ClockCheck";
 import ConvertedTimes from "./components/ConvertedTimes";
 import DiscordTimestamps from "./components/DiscordTimestamps";
 import DokiTimeInput from "./components/DokiTimeInput";
-import EnvironmentBadge from "./components/EnvironmentBadge";
+import TopNav from "./components/TopNav";
 import UpdateAlert from "./components/UpdateAlert";
 import { copyToClipboard } from "./logic/clipboard";
 import { readShareParams, shareUrl } from "./logic/shareLink";
@@ -24,6 +23,7 @@ import { useNow } from "./logic/useNow";
 
 /** A clean link to this page, at a Doki Time or (null) live. */
 const linkTo = (selection) => shareUrl(window.location.href, import.meta.env.BASE_URL, selection);
+const hubUrl = `https://${import.meta.env.VITE_SUB_DOMAIN || "www"}.duck-automata.com/`;
 
 export default function App() {
     const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
@@ -75,22 +75,10 @@ export default function App() {
             {/* enableColorScheme makes native controls (the date and time pickers) follow the theme */}
             <CssBaseline enableColorScheme />
             <UpdateAlert />
-            <Box
-                component="main"
-                sx={{ maxWidth: 680, mx: "auto", px: 2, py: { xs: 3, sm: 5 }, boxSizing: "border-box" }}
-            >
-                <Box component="header" sx={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: 2, mb: 3 }}>
-                    <Box sx={{ flex: 1, minWidth: 220 }}>
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                            <Typography variant="h4" component="h1">
-                                Doki Time
-                            </Typography>
-                            <EnvironmentBadge />
-                        </Box>
-                        <Typography sx={{ color: "text.secondary" }}>
-                            Convert Doki Time to GMT, JST and your local time.
-                        </Typography>
-                    </Box>
+            <TopNav
+                title="Doki Time"
+                hubUrl={hubUrl}
+                actions={
                     <ToggleButtonGroup
                         size="small"
                         exclusive
@@ -101,8 +89,12 @@ export default function App() {
                         <ToggleButton value="12h">12h</ToggleButton>
                         <ToggleButton value="24h">24h</ToggleButton>
                     </ToggleButtonGroup>
-                </Box>
-
+                }
+            />
+            <Box
+                component="main"
+                sx={{ maxWidth: 680, mx: "auto", px: 2, py: { xs: 2, sm: 4 }, boxSizing: "border-box" }}
+            >
                 <Stack spacing={2}>
                     <DokiTimeInput
                         date={date}
