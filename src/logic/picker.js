@@ -14,6 +14,9 @@ const toDate = (ms) => new Date(ms).toISOString().slice(0, 10);
 /** @returns {string} "YYYY-MM-DD" */
 export const addDays = (date, days) => toDate(toMs(date) + days * DAY);
 
+/** @returns {string} "YYYY-MM-DD", the Sunday on or before `date` */
+export const sundayOf = (date) => addDays(date, -new Date(toMs(date)).getUTCDay());
+
 /**
  * @param {string} month - "YYYY-MM"
  * @returns {string} "YYYY-MM"

@@ -117,15 +117,19 @@ describe("App", () => {
         expect(window.location.search).toBe("?d=2026-11-05&t=19%3A00");
     });
 
-    it("picks a day from the next two weeks", () => {
+    it("picks a day from this week and next", () => {
         renderAt("");
         const today = instantToDoki(Date.now()).date;
-        const days = within(screen.getByRole("group", { name: "Next two weeks" })).getAllByRole("button");
-        expect(days[0]).toHaveAttribute("aria-pressed", "true");
+        const days = within(screen.getByRole("group", { name: "This week and next" })).getAllByRole("button");
+        expect(days).toHaveLength(14);
+        expect(days[0]).toHaveAccessibleName(/^(Today, )?Sunday/);
+        expect(days[13]).toHaveAccessibleName(/^Saturday/);
+        const todayIndex = days.findIndex((day) => day.getAttribute("aria-pressed") === "true");
+        expect(days[todayIndex]).toHaveAccessibleName(/^Today, /);
 
-        fireEvent.click(days[1]);
+        fireEvent.click(days[todayIndex + 1]);
 
-        expect(days[1]).toHaveAttribute("aria-pressed", "true");
+        expect(days[todayIndex + 1]).toHaveAttribute("aria-pressed", "true");
         expect(new URLSearchParams(window.location.search).get("d")).toBe(addDays(today, 1));
         expect(screen.queryByText("Live")).not.toBeInTheDocument();
     });
@@ -133,7 +137,7 @@ describe("App", () => {
     it("picks any other date from the calendar", () => {
         renderAt("?d=2026-11-05&t=19:00");
 
-        // Reads "Other date" while Nov 5 is in the next two weeks, and the date itself once it isn't
+        // Reads "Other date" while Nov 5 is this week or next, and the date itself once it isn't
         fireEvent.click(screen.getByRole("button", { name: /^(Other date|Thu, Nov 5, 2026)$/ }));
         fireEvent.click(screen.getByRole("button", { name: "Next month" }));
         const december = screen.getByRole("group", { name: "December 2026" });

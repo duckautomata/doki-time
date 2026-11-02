@@ -7,6 +7,7 @@ import {
     minuteItems,
     monthCells,
     parseTypedTime,
+    sundayOf,
     withHour,
     withMinute,
     withPeriod,
@@ -17,6 +18,16 @@ describe("addDays", () => {
         expect(addDays("2026-11-30", 1)).toBe("2026-12-01");
         expect(addDays("2026-12-31", 1)).toBe("2027-01-01");
         expect(addDays("2026-03-01", -1)).toBe("2026-02-28");
+    });
+});
+
+describe("sundayOf", () => {
+    it("steps back to the week's Sunday, across months too", () => {
+        // November 2026 starts on a Sunday
+        expect(sundayOf("2026-11-01")).toBe("2026-11-01");
+        expect(sundayOf("2026-11-05")).toBe("2026-11-01");
+        expect(sundayOf("2026-11-07")).toBe("2026-11-01");
+        expect(sundayOf("2026-12-02")).toBe("2026-11-29");
     });
 });
 
